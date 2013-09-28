@@ -6,7 +6,7 @@ import json
 
 from flask import Flask, request
 
-app = Flask(_name_)
+app = Flask(__name__)
 
 @app.route("/")
 def hello():
