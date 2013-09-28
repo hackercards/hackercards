@@ -6,16 +6,24 @@
     <script>
       ws = new WebSocket("ws://" + document.domain + ":5000/ws");
       ws.onmessage = function(message) {
-        var cards, html, i;
-        console.log("Message recieved: " + message.data);
-        cards = JSON.parse(message.data);
+        message = message.data;
+        console.log("Message recieved: " + message);
+        message = JSON.parse(message);
+        if (message.type === 'join') {
+          joinGame(message.hand);
+        }
+      }
+
+      ws.onclose = function() {
+        console.log("Server disconnected");
+      }
+
+      function joinGame(cards) {
+        var i;
         $(".hand").empty();
         for (i = 0; i < cards.length; ++i) {
           $(".hand").append('<div class="card">' + cards[i] + '</div>');
         }
-      }
-      ws.onclose = function() {
-        console.log("Server disconnected");
       }
     </script>
     <h1>Your hand:</h1>
