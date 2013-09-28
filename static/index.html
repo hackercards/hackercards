@@ -4,13 +4,31 @@
   </head>
   <body>
     <script>
-      ws = new WebSocket("ws://" + document.domain + ":5000/ws");
+      var ws = new WebSocket("ws://" + document.domain + ":5000/ws");
+
+      function joinGame() {
+        var text, button;
+
+        function sendName() {
+          var name = text.val();
+          if (name) {
+            $("#game").empty();
+            ws.send(JSON.stringify(name));
+          }
+        }
+
+        text = $('<input name="playerName" type="text" />');
+        button = $('<button name="playerJoin" type="button">Join</button>');
+        button.click(sendName);
+        $("#game").append(text).append(button);
+      }
+
       ws.onmessage = function(message) {
         message = message.data;
         console.log("Message recieved: " + message);
         message = JSON.parse(message);
         if (message.type === 'join') {
-          joinGame(message.hand);
+          newHand(message.hand);
         }
       }
 
@@ -18,16 +36,19 @@
         console.log("Server disconnected");
       }
 
-      function joinGame(cards) {
-        var i;
-        $(".hand").empty();
+      function newHand(cards) {
+        var i, hand;
+        hand = $('<div class="hand" />');
+        hand.append('<h1>Your hand:</h1>');
         for (i = 0; i < cards.length; ++i) {
-          $(".hand").append('<div class="card">' + cards[i] + '</div>');
+          hand.append('<div class="card">' + cards[i] + '</div>');
         }
+        $("#game").append(hand);
       }
+
+      window.onload = joinGame;
     </script>
-    <h1>Your hand:</h1>
-    <div class="hand">
+    <div id="game">
     </div>
   </body>
 </html>

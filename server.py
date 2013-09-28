@@ -39,6 +39,7 @@ def cards():
             counter += 1
      
         ws = request.environ['wsgi.websocket']
+        name = ws.receive()
         message = {'type': 'join', 'hand': cards}
         ws.send(json.dumps(message))
 
