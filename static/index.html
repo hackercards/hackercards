@@ -7,11 +7,15 @@
       ws = new WebSocket("ws://" + document.domain + ":5000/ws");
       ws.onmessage = function(message) {
         var cards, html, i;
-        console.log("Message recieved: " + message.data);
-        cards = JSON.parse(message.data);
-        $(".hand").empty();
-        for (i = 0; i < cards.length; ++i) {
-          $(".hand").append('<div class="card">' + cards[i] + '</div>');
+        message = message.data;
+        console.log("Message recieved: " + message);
+        message = JSON.parse(message);
+        if (message.type === 'join') {
+          cards = message.hand;
+          $(".hand").empty();
+          for (i = 0; i < cards.length; ++i) {
+            $(".hand").append('<div class="card">' + cards[i] + '</div>');
+          }
         }
       }
       ws.onclose = function() {
