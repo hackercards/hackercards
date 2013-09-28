@@ -18,7 +18,9 @@ def cards():
 	if request.environ.get('wsgi.websocket'):
 		ws = request.environ['wsgi.websocket']
 		cards = ["Kyle", "Amy", "Brandon", "Andrew", "Cards"]
-		ws.send(json.dumps(cards))
+		message = {'type': 'join', 'hand': cards}
+		ws.send(json.dumps(message))
+
 
 
 if __name__ == "__main__":
