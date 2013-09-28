@@ -4,6 +4,23 @@
   </head>
   <body>
     <script>
+      ws = new WebSocket("ws://" + document.domain + ":5000/ws");
+      ws.onmessage = function(message) {
+        var cards, html, i;
+        console.log("Message recieved: " + message.data);
+        cards = JSON.parse(message.data);
+        for (i = 0; i < cards.length; ++i) {
+          html += '<div class="card">' + cards[i] + '</div>';
+        }
+        $("#hand").empty();
+        $("#hand").append(html);
+      }
+      ws.onclose = function() {
+        console.log("Server disconnected");
+      }
     </script>
+    <h1>Your hand:</h1>
+    <div class="hand">
+    </div>
   </body>
 </html>
