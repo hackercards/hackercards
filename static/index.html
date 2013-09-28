@@ -9,11 +9,10 @@
         var cards, html, i;
         console.log("Message recieved: " + message.data);
         cards = JSON.parse(message.data);
+        $(".hand").empty();
         for (i = 0; i < cards.length; ++i) {
-          html += '<div class="card">' + cards[i] + '</div>';
+          $(".hand").append('<div class="card">' + cards[i] + '</div>');
         }
-        $("#hand").empty();
-        $("#hand").append(html);
       }
       ws.onclose = function() {
         console.log("Server disconnected");
