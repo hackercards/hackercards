@@ -98,14 +98,16 @@ class Game:
         #if amount of cards played are equal to the amount of players minus judge
         #start judging round
         if len(self.cards_played) == len(self.players) - 1:
-            self.judge_round(ws)
+            self.judge_round()
 
-    def judge_round(self, ws):
+    def judge_round(self):
         cards = []
         for card, _ in self.cards_played:
             cards.append(card)
         message = {'type': 'display', 'cards': cards}
         self.broadcast(message)
+
+
 
 app = Flask(__name__)
 
