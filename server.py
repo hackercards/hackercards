@@ -12,7 +12,6 @@ class Deck:
         #takes text file and converts cards on lines into a list
         with open(file_name) as f:
             self.deck = f.readlines()
-        #sets position as the 
         self.position = len(self.deck)
 
     #deals one card
@@ -24,7 +23,7 @@ class Deck:
             self.position = 0
         return self.deck[self.position]
 
-    #deals n amount of cards
+    # deals n cards
     def deal_cards(self, n):
         cards = []
         for _ in range(n):
@@ -51,7 +50,6 @@ class Game:
         message = {'type': 'join', 'hand': cards}
         ws.send(json.dumps(message))
 
-        #if game has not started and amount of players >= 3 then start game
         if self.game_state == Game.IDLE and len(self.players) >= 3:
             self.start_round()
 
@@ -74,7 +72,6 @@ class Game:
         elif self.game_state == Game.IDLE:
             self.start_round()
 
-    #chooses the player who gets to choose the card
     def choose_judge(self):
         if self.judge_counter == len(self.players):
             self.judge_counter = 0
@@ -99,8 +96,6 @@ class Game:
         message = {'type': 'draw', 'card': new_card}
         ws.send(json.dumps(message))
 
-        #if amount of cards played are equal to the amount of players minus judge
-        #start judging round
         if len(self.cards_played) == len(self.players) - 1:
             self.display_round()
 

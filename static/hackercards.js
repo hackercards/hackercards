@@ -19,9 +19,7 @@ function joinGame() {
 }
 
 ws.onmessage = function(message) {
-  message = message.data;
-  console.log("Message recieved: " + message);
-  message = JSON.parse(message);
+  message = JSON.parse(message.data);
   if (message.type === 'join') {
     newHand(message.hand);
   } else if (message.type === 'round_start') {
