@@ -38,8 +38,8 @@ class Game:
         self.judge_counter = 0
         self.players = []
         self.started = False
-
         self.cards_played = None
+        self.chosen_card = None
 
     def add_player(self, name, ws):
         self.players.append((name, ws))
@@ -70,6 +70,8 @@ class Game:
         #ignore until round starts
         if self.cards_played is not None:
             self.play_card(name, ws, msg)
+        elif self.chosen_card is not None:
+            self.judge_round(name, ws, msg)
 
     #chooses the player who gets to choose the card
     def choose_judge(self):
@@ -77,7 +79,7 @@ class Game:
             self.judge_counter = 0
         judge, _ = self.players[self.judge_counter]
         self.judge_counter += 1
-        return judge 
+        return judge           
 
     def start_round(self):
         self.cards_played = {}
@@ -98,16 +100,23 @@ class Game:
         #if amount of cards played are equal to the amount of players minus judge
         #start judging round
         if len(self.cards_played) == len(self.players) - 1:
-            self.judge_round()
+            self.display_round()
 
-    def judge_round(self):
+    def display_round(self):
         cards = []
         for card, _ in self.cards_played:
             cards.append(card)
         message = {'type': 'display', 'cards': cards}
         self.broadcast(message)
+        chosen_card = ''
 
-
+    def judge_round(self, ws, card):
+        winner = self.cards_played[card]
+        message = {'type': 'round end', 
+                   'card': card, 
+                   'winner': winner}
+        self.broadcast(message)
+        self.start_round()
 
 app = Flask(__name__)
 
