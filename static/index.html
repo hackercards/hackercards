@@ -36,6 +36,8 @@
           addCard(message.card);
         } else if (message.type === 'display') {
           displayCards(message.cards);
+        } else if (message.type === 'round_end') {
+          endRound(message.winner, message.card);
         } else {
           console.log('Unknown message type: ' + message.type);
         }
@@ -80,11 +82,13 @@
         }
       }
 
-      function addCard(card) {
-        $(".hand").append(makeCardButton(card));
+      function endRound(winner, card) {
+        $("#game").append('<h2>' + winner + ' wins with:</h2>');
+        $("#game").append(makeCardButton(card));
       }
 
-      function makeClickable(elements) {
+      function addCard(card) {
+        $(".hand").append(makeCardButton(card));
       }
 
       function submitCard(card) {

@@ -32,14 +32,17 @@ class Deck:
         return cards
 
 class Game:
+    IDLE = 0
+    PLAY = 1
+    JUDGING = 2
+
     def __init__(self):
         self.black = Deck('black.txt')
         self.white = Deck('white.txt')
         self.judge_counter = 0
         self.players = []
-        self.started = False
-        self.cards_played = None
-        self.chosen_card = None
+        self.game_state = Game.IDLE
+        self.cards_played = {}
 
     def add_player(self, name, ws):
         self.players.append((name, ws))
@@ -49,8 +52,8 @@ class Game:
         ws.send(json.dumps(message))
 
         #if game has not started and amount of players >= 3 then start game
-        if not self.started and len(self.players) == 3:
-            self.start_game()
+        if self.game_state == Game.IDLE and len(self.players) == 3:
+            self.start_round()
 
     def remove_player(self, removed):
         for i, (name, _) in enumerate(self.players):
@@ -62,16 +65,12 @@ class Game:
         for name, ws in self.players:
             ws.send(json.dumps(message))
 
-    def start_game(self):
-        self.started = True
-        self.start_round()
-
     def receive_message(self, name, ws, msg):
         #ignore until round starts
-        if self.cards_played is not None:
+        if self.game_state == Game.PLAY:
             self.play_card(name, ws, msg)
-        elif self.chosen_card is not None:
-            self.judge_round(name, ws, msg)
+        elif self.game_state == Game.JUDGING:
+            self.judge_round(msg)
 
     #chooses the player who gets to choose the card
     def choose_judge(self):
@@ -82,6 +81,7 @@ class Game:
         return judge           
 
     def start_round(self):
+        self.game_state = Game.PLAY
         self.cards_played = {}
 
         category_card = self.white.deal_card()
@@ -103,18 +103,18 @@ class Game:
             self.display_round()
 
     def display_round(self):
+        self.game_state = Game.JUDGING
         cards = self.cards_played.keys()
         message = {'type': 'display', 'cards': cards}
         self.broadcast(message)
-        chosen_card = ''
 
-    def judge_round(self, ws, card):
+    def judge_round(self, card):
         winner = self.cards_played[card]
-        message = {'type': 'round end', 
+        message = {'type': 'round_end', 
                    'card': card, 
                    'winner': winner}
         self.broadcast(message)
-        self.start_round()
+        # self.start_round()
 
 app = Flask(__name__)
 
