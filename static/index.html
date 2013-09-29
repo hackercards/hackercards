@@ -67,9 +67,9 @@
           $(".hand").children().click(function() {
             var button = $(this);
             if (!submitted) {
-              ws.send(button.text());
-              button.remove();
               submitted = true;
+              submitCard(button.text());
+              button.remove();
             }
           });
         }
@@ -77,6 +77,11 @@
 
       function addCard(card) {
         $(".hand").append(makeCardButton(card));
+      }
+
+      function submitCard(card) {
+        ws.send(card);
+        $(".round").append('<h2>You submitted: ' + card + '</h2>');
       }
 
       window.onload = joinGame;
