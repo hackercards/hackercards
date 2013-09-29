@@ -58,6 +58,10 @@ class Game:
                 del self.players[i]
                 return;
 
+    def broadcast(self, message):
+        for name, ws in self.players:
+            ws.send(json.dumps(message))
+
     def start_game(self):
         self.started = True
         self.start_round()
@@ -83,8 +87,7 @@ class Game:
         message = {'type': 'round_start',
                    'category': category_card,
                    'judge': player_judge}
-        for name, ws in self.players:
-            ws.send(json.dumps(message))
+        self.broadcast(message)
 
     def play_card(self, name, ws, card):
         self.cards_played[card] = name
@@ -95,11 +98,14 @@ class Game:
         #if amount of cards played are equal to the amount of players minus judge
         #start judging round
         if len(self.cards_played) == len(self.players) - 1:
-            self.judge_round()
+            self.judge_round(ws)
 
-    def judge_round(self):
-        pass
-
+    def judge_round(self, ws):
+        cards = []
+        for card, _ in self.cards_played:
+            cards.append(card)
+        message = {'type': 'display', 'cards': cards}
+        self.broadcast(message)
 
 app = Flask(__name__)
 
