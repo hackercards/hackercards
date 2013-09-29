@@ -9,7 +9,7 @@ p.customfont {
 
 @font-face {
     font-family: "headerFont";
-    src: url(basictitlefont.ttf) format("truetype");
+    src: url(LANENAR_.ttf) format("truetype");
 }
 p.customfont { 
     font-family: "headerFont", Verdana, Tahoma;
