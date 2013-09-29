@@ -1,9 +1,4 @@
 
-body{
-	background: url('pinstripe.png');
-}
-
-
 @font-face {
     font-family: "titleFont";
     src: url(KGALittleSwag.ttf) format("truetype");
@@ -12,12 +7,33 @@ p.customfont {
     font-family: "titleFont", Verdana, Tahoma;
 }
 
+@font-face {
+    font-family: "headerFont";
+    src: url(basictitlefont.ttf) format("truetype");
+}
+p.customfont { 
+    font-family: "headerFont", Verdana, Tahoma;
+}
+
+body{
+	background: url('pinstripe.png');
+	font-family: "HelveticaNeue";
+}
+
+h1{
+	font-family: "headerFont";
+}
+
+h2{
+	font-family: "headerFont";
+}
+
 .big{
-	text-align: center;
+	text-align: left;
 	font-size: 100px;
 	height: 100px;
 	width: 800px;
-	margin-right: 10px;
+	margin-right: auto;
 	font-family: "titleFont";
 }
 
@@ -61,3 +77,4 @@ p.customfont {
 	text-shadow:1px 1px 0px #ffffff;
     margin: 25px;
 }
+
