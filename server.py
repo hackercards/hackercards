@@ -90,6 +90,8 @@ def cards():
         game.add_player(name, ws)
         while True:
             msg = ws.receive()
+            if msg is None:
+                break
             game.receive_message(name, msg)
 
 if __name__ == "__main__":
