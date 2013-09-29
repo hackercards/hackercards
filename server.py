@@ -40,6 +40,8 @@ class Game:
         self.players = []
         self.started = False
 
+        self.cards_played = None
+
     def add_player(self, name, ws):
         self.players.append((name, ws))
 
@@ -50,13 +52,13 @@ class Game:
         if not self.started and len(self.players) == 3:
             self.start_game()
 
-
     def start_game(self):
         self.started = True
         self.start_round()
 
-    def receive_message(self, name, msg):
-        pass
+    def receive_message(self, name, ws, msg):
+        if self.cards_played is not None:
+            self.play_card(name, ws, msg)
 
     def choose_judge(self):
         if self.judge_counter == len(self.players):
@@ -66,6 +68,8 @@ class Game:
         return judge 
 
     def start_round(self):
+        self.cards_played = {}
+
         category_card = self.white.deal_card()
         player_judge = self.choose_judge()
         message = {'type': 'round_start',
@@ -73,6 +77,18 @@ class Game:
                    'judge': player_judge}
         for name, ws in self.players:
             ws.send(json.dumps(message))
+
+    def play_card(self, name, ws, card):
+        self.cards_played[card] = name
+        new_card = self.black.draw_card()
+        message = {'type': 'draw', 'card': new_card}
+        ws.send(json.dumps(message))
+
+        if len(self.cards_played) == len(self.players) - 1:
+            self.judge_round()
+
+    def judge_round(self):
+        pass
 
 
 app = Flask(__name__)
@@ -94,7 +110,7 @@ def cards():
             msg = ws.receive()
             if msg is None:
                 break
-            game.receive_message(name, msg)
+            game.receive_message(name, ws, msg)
 
 if __name__ == "__main__":
     http_server = WSGIServer(('',5000), app, handler_class=WebSocketHandler)
