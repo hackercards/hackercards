@@ -7,25 +7,24 @@ import json
 from random import shuffle
 from flask import Flask, request
 
-def create_deck(file_name):
-    with open(file_name) as f:
-        color = f.readlines()
-    shuffle(color)
-    return color
-
 class Deck:
     def __init__(self, file_name):
+        #takes text file and converts cards on lines into a list
         with open(file_name) as f:
             self.deck = f.readlines()
+        #sets position as the 
         self.position = len(self.deck)
 
+    #deals one card
     def deal_card(self):
         self.position += 1
+        #if deck runs out, the deck will reshuffle
         if self.position >= len(self.deck):
             shuffle(self.deck)
             self.position = 0
         return self.deck[self.position]
 
+    #deals n amount of cards
     def deal_cards(self, n):
         cards = []
         for _ in range(n):
@@ -49,6 +48,7 @@ class Game:
         message = {'type': 'join', 'hand': cards}
         ws.send(json.dumps(message))
 
+        #if game has not started and amount of players >= 3 then start game
         if not self.started and len(self.players) == 3:
             self.start_game()
 
@@ -63,9 +63,11 @@ class Game:
         self.start_round()
 
     def receive_message(self, name, ws, msg):
+        #ignore until round starts
         if self.cards_played is not None:
             self.play_card(name, ws, msg)
 
+    #chooses the player who gets to choose the card
     def choose_judge(self):
         if self.judge_counter == len(self.players):
             self.judge_counter = 0
@@ -90,6 +92,8 @@ class Game:
         message = {'type': 'draw', 'card': new_card}
         ws.send(json.dumps(message))
 
+        #if amount of cards played are equal to the amount of players minus judge
+        #start judging round
         if len(self.cards_played) == len(self.players) - 1:
             self.judge_round()
 
