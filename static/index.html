@@ -48,70 +48,68 @@
         $("#game").empty().append('<h1>Server disconnected</h1>');
       }
 
-      function makeCardButton(card) {
+      function makeCard(card) {
         return '<button class="card" type="button">' + card + '</button>';
       }
 
       function newHand(cards) {
         var i, hand;
-        hand = $('<div class="hand" />');
-        hand.append('<h1>Your hand:</h1>');
+        hand = $('<div class="cards" id="hand" />');
         for (i = 0; i < cards.length; ++i) {
-          hand.append(makeCardButton(cards[i]));
+          hand.append(makeCard(cards[i]));
         }
-        $("#game").append(hand);
+        $("#game").append('<h1>Your hand:</h1>').append(hand);
       }
 
       function startRound(category, judge) {
         var round, submitted = false;
         roundJudge = judge;
-        round = $('<div class="round" />');
-        round.append('<h3>Judge: ' + judge + '</h3>');
-        round.append('<h2>Category: ' + category + '</h2>');
-        $("#game").append(round);
+        $("#game").append('<h3>Judge: ' + judge + '</h3>')
+          .append('<h2>Category: ' + category + '</h2>');
 
         if (roundJudge !== name) {
-          $(".hand").children().click(function() {
-            var button = $(this);
-            if (!submitted) {
-              submitted = true;
-              submitCard(button.text());
-              button.remove();
-            }
-          });
+          makeClickable($("#hand"), true);
         }
       }
 
       function endRound(winner, card) {
         $("#game").append('<h2>' + winner + ' wins with:</h2>');
-        $("#game").append(makeCardButton(card));
+        $("#game").append(makeCard(card));
       }
 
       function addCard(card) {
-        $(".hand").append(makeCardButton(card));
+        $("#hand").append(makeCard(card));
       }
 
       function submitCard(card) {
         ws.send(card);
-        $(".round").append('<h2>You submitted: ' + card + '</h2>');
+        $("#game").append('<h2>You submitted: ' + card + '</h2>');
       }
 
       function displayCards(cards) {
-        var hand, submitted = false, i;
-        hand = $('<div class="submitted">All cards:</div>');
+        var hand, i;
+        hand = $('<div class="cards" />');
         for (i = 0; i < cards.length; ++i) {
-          hand.append(makeCardButton(cards[i]));
+          hand.append(makeCard(cards[i]));
         }
-        $("#game").append(hand);
+        $("#game").append('<h1>All cards:</h1>').append(hand);
         if (roundJudge === name) {
-          hand.children().click(function() {
-            var button = $(this);
-            if (!submitted) {
-              submitted = true;
-              submitCard(button.text());
-            }
-          });
+          makeClickable(hand, false);
         }
+      }
+
+      function makeClickable(element, disappear) {
+        var submitted = false;
+        element.children().click(function() {
+          var button = $(this);
+          if (!submitted) {
+            submitted = true;
+            submitCard(button.text());
+            if (disappear) {
+              button.remove();
+            }
+          }
+        });
       }
 
       window.onload = joinGame;
