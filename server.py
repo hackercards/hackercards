@@ -17,14 +17,14 @@ class Deck:
     def __init__(self, file_name):
         with open(file_name) as f:
             self.deck = f.readlines()
-        shuffle(self.deck)
-        self.position = 0
+        self.position = len(self.deck)
 
     def deal_card(self):
-        if self.position > len(self.deck)
+        self.position += 1
+        if self.position >= len(self.deck):
             shuffle(self.deck)
-            position = 0
-        return self.deck[position]
+            self.position = 0
+        return self.deck[self.position]
 
     def deal_cards(self, n):
         cards = []
