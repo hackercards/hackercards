@@ -5,7 +5,7 @@
   <body>
     <script>
       var ws = new WebSocket("ws://" + document.domain + ":5000/ws"),
-          name = "";
+          name, roundJudge;
 
       function joinGame() {
         var text, button;
@@ -35,7 +35,7 @@
         } else if (message.type === 'draw') {
           addCard(message.card);
         } else if (message.type === 'display') {
-          displayCard(message.cards);
+          displayCards(message.cards);
         } else {
           console.log('Unknown message type: ' + message.type);
         }
@@ -62,12 +62,13 @@
 
       function startRound(category, judge) {
         var round, submitted = false;
+        roundJudge = judge;
         round = $('<div class="round" />');
         round.append('<h3>Judge: ' + judge + '</h3>');
         round.append('<h2>Category: ' + category + '</h2>');
         $("#game").append(round);
 
-        if (judge !== name) {
+        if (roundJudge !== name) {
           $(".hand").children().click(function() {
             var button = $(this);
             if (!submitted) {
@@ -83,16 +84,29 @@
         $(".hand").append(makeCardButton(card));
       }
 
+      function makeClickable(elements) {
+      }
+
       function submitCard(card) {
         ws.send(card);
         $(".round").append('<h2>You submitted: ' + card + '</h2>');
       }
 
       function displayCards(cards) {
-        var submitted, i;
-        submitted = $('<div class="submitted" />');
+        var hand, submitted = false, i;
+        hand = $('<div class="submitted">All cards:</div>');
         for (i = 0; i < cards.length; ++i) {
-          submitted.append(cards[i]);
+          hand.append(makeCardButton(cards[i]));
+        }
+        $("#game").append(hand);
+        if (roundJudge === name) {
+          hand.children().click(function() {
+            var button = $(this);
+            if (!submitted) {
+              submitted = true;
+              submitCard(button.text());
+            }
+          });
         }
       }
 
