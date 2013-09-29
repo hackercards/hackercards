@@ -4,13 +4,14 @@
   </head>
   <body>
     <script>
-      var ws = new WebSocket("ws://" + document.domain + ":5000/ws");
+      var ws = new WebSocket("ws://" + document.domain + ":5000/ws"),
+          name = "";
 
       function joinGame() {
         var text, button;
 
         function sendName() {
-          var name = text.val();
+          name = text.val();
           if (name) {
             $("#game").empty();
             ws.send(name);
@@ -62,14 +63,16 @@
         round.append('<h2>Category: ' + category + '</h2>');
         $("#game").append(round);
 
-        $(".hand").children().click(function() {
-          var button = $(this);
-          if (!submitted) {
-            ws.send(button.text());
-            button.remove();
-            submitted = true;
-          }
-        });
+        if (judge !== name) {
+          $(".hand").children().click(function() {
+            var button = $(this);
+            if (!submitted) {
+              ws.send(button.text());
+              button.remove();
+              submitted = true;
+            }
+          });
+        }
       }
 
       function addCard(card) {
