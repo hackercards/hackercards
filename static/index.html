@@ -31,11 +31,18 @@
           newHand(message.hand);
         } else if (message.type === 'round_start') {
           startRound(message.category, message.judge);
+        } else if (message.type === 'draw') {
+          addCard(message.card);
         }
       }
 
       ws.onclose = function() {
         console.log("Server disconnected");
+        $("#game").empty().append('<h1>Server disconnected</h1>');
+      }
+
+      function makeCardButton(card) {
+        return '<button class="card" type="button">' + card + '</button>';
       }
 
       function newHand(cards) {
@@ -43,7 +50,7 @@
         hand = $('<div class="hand" />');
         hand.append('<h1>Your hand:</h1>');
         for (i = 0; i < cards.length; ++i) {
-          hand.append('<div class="card">' + cards[i] + '</div>');
+          hand.append(makeCardButton(cards[i]));
         }
         $("#game").append(hand);
       }
@@ -54,6 +61,16 @@
         round.append('<h3>Judge: ' + judge + '</h3>');
         round.append('<h2>Category: ' + category + '</h2>');
         $("#game").append(round);
+
+        $(".hand").children().click(function() {
+          var button = $(this);
+          ws.send(button.text());
+          button.remove();
+        });
+      }
+
+      function addCard(card) {
+        $(".hand").append(makeCardButton(card));
       }
 
       window.onload = joinGame;

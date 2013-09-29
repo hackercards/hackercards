@@ -52,6 +52,12 @@ class Game:
         if not self.started and len(self.players) == 3:
             self.start_game()
 
+    def remove_player(self, removed):
+        for i, (name, _) in enumerate(self.players):
+            if removed == name:
+                del self.players[i]
+                return;
+
     def start_game(self):
         self.started = True
         self.start_round()
@@ -82,7 +88,7 @@ class Game:
 
     def play_card(self, name, ws, card):
         self.cards_played[card] = name
-        new_card = self.black.draw_card()
+        new_card = self.black.deal_card()
         message = {'type': 'draw', 'card': new_card}
         ws.send(json.dumps(message))
 
@@ -113,6 +119,7 @@ def cards():
         while True:
             msg = ws.receive()
             if msg is None:
+                game.remove_player(name)
                 break
             game.receive_message(name, ws, msg)
 
