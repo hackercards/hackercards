@@ -13,7 +13,7 @@
           var name = text.val();
           if (name) {
             $("#game").empty();
-            ws.send(JSON.stringify(name));
+            ws.send(name);
           }
         }
 
@@ -29,7 +29,7 @@
         message = JSON.parse(message);
         if (message.type === 'join') {
           newHand(message.hand);
-        } else if (message.type === 'round start') {
+        } else if (message.type === 'round_start') {
           startRound(message.category, message.judge);
         }
       }
