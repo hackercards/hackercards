@@ -29,6 +29,8 @@
         message = JSON.parse(message);
         if (message.type === 'join') {
           newHand(message.hand);
+        } else if (message.type === 'round start') {
+          startRound(message.category, message.judge);
         }
       }
 
@@ -44,6 +46,14 @@
           hand.append('<div class="card">' + cards[i] + '</div>');
         }
         $("#game").append(hand);
+      }
+
+      function startRound(category, judge) {
+        var round;
+        round = $('<div class="round" />');
+        round.append('<h3>Judge: ' + judge + '</h3>');
+        round.append('<h2>Category: ' + category + '</h2>');
+        $("#game").append(round);
       }
 
       window.onload = joinGame;

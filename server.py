@@ -68,7 +68,9 @@ class Game:
     def start_round(self):
         category_card = self.white.deal_card()
         player_judge = self.choose_judge()
-        message = {'type': 'round_start', 'category': category_card, 'judge': player_judge}
+        message = {'type': 'round_start',
+                   'category': category_card,
+                   'judge': player_judge}
         for name, ws in self.players:
             ws.send(json.dumps(message))
 
