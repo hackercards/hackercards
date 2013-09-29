@@ -18,12 +18,12 @@ class Game:
         self.black = create_deck('black.txt')
         self.white = create_deck('white.txt')
         self.counter = 1
-
-        self.players = {}
+        self.players = []
+        self.started = False
 
 
     def add_player(self, name, ws):
-        self.players[name] = ws
+        self.players.append((name, ws))
 
         cards = []
         for x in range(7):
@@ -33,7 +33,15 @@ class Game:
         message = {'type': 'join', 'hand': cards}
         ws.send(json.dumps(message))
 
-    def receive_message(name, msg):
+        if not self.started and len(self.players) == 3:
+            self.start_game()
+
+
+    def start_game(self):
+        self.started = True
+
+
+    def receive_message(self, name, msg):
         pass
 
 
