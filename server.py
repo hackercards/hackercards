@@ -52,7 +52,7 @@ class Game:
         ws.send(json.dumps(message))
 
         #if game has not started and amount of players >= 3 then start game
-        if self.game_state == Game.IDLE and len(self.players) == 3:
+        if self.game_state == Game.IDLE and len(self.players) >= 3:
             self.start_round()
 
     def remove_player(self, removed):
@@ -71,6 +71,8 @@ class Game:
             self.play_card(name, ws, msg)
         elif self.game_state == Game.JUDGING:
             self.judge_round(msg)
+        elif self.game_state == Game.IDLE:
+            self.start_round()
 
     #chooses the player who gets to choose the card
     def choose_judge(self):
@@ -114,7 +116,7 @@ class Game:
                    'card': card, 
                    'winner': winner}
         self.broadcast(message)
-        # self.start_round()
+        self.game_state = Game.IDLE
 
 app = Flask(__name__)
 

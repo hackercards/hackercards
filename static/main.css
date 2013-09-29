@@ -37,6 +37,10 @@ h2{
 	font-family: "titleFont";
 }
 
+.cards {
+    display: table;
+}
+
 .card {
 	-moz-box-shadow:inset 0px 1px 0px 0px #ffffff;
 	-webkit-box-shadow:inset 0px 1px 0px 0px #ffffff;
@@ -59,18 +63,19 @@ h2{
 	border-bottom-left-radius:6px;
 	text-indent:0px;
 	border:1px solid #dcdcdc;
-	display:inline-block;
+	display: table-cell;
 	color:#777777;
 	font-family:arial;
-	font-size:15px;
+	font-size:20px;
 	font-weight:bold;
 	font-style:normal;
-	height:150px;
+	height:200px;
 	line-height:20px;
-	width:120px;
+	width:150px;
 	text-decoration:none;
 	text-align:center;
 	text-shadow:1px 1px 0px #ffffff;
-    margin: 25px;
+    margin: 15px;
+    vertical-align:top;
 }
 
