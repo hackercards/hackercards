@@ -8,16 +8,24 @@ p.customfont {
 }
 
 @font-face {
-    font-family: "bodyFont";
-    src: url(HelveticaNeue.dfont) format("truetype");
+    font-family: "headerFont";
+    src: url(basictitlefont.ttf) format("truetype");
 }
 p.customfont { 
-    font-family: "bodyFont", Verdana, Tahoma;
+    font-family: "headerFont", Verdana, Tahoma;
 }
 
 body{
 	background: url('pinstripe.png');
 	font-family: "HelveticaNeue";
+}
+
+h1{
+	font-family: "headerFont";
+}
+
+h2{
+	font-family: "headerFont";
 }
 
 .big{
@@ -28,8 +36,6 @@ body{
 	margin-right: auto;
 	font-family: "titleFont";
 }
-<<<<<<< HEAD
-=======
 
 .card {
 	-moz-box-shadow:inset 0px 1px 0px 0px #ffffff;
@@ -67,4 +73,4 @@ body{
 	text-shadow:1px 1px 0px #ffffff;
     margin: 25px;
 }
->>>>>>> 8a509c6a592e77277802f343f4217068c9616fd4
+
