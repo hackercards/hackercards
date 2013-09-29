@@ -124,7 +124,7 @@ game = Game()
 def hello():
     return app.send_static_file('index.html')
 
-@app.route("/src/<name>")
+@app.route("/<name>")
 def serve_file(name):
     return app.send_static_file(name)
 
