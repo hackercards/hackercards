@@ -34,6 +34,10 @@
           startRound(message.category, message.judge);
         } else if (message.type === 'draw') {
           addCard(message.card);
+        } else if (message.type === 'display') {
+          displayCard(message.cards);
+        } else {
+          console.log('Unknown message type: ' + message.type);
         }
       }
 
@@ -67,9 +71,9 @@
           $(".hand").children().click(function() {
             var button = $(this);
             if (!submitted) {
-              ws.send(button.text());
-              button.remove();
               submitted = true;
+              submitCard(button.text());
+              button.remove();
             }
           });
         }
@@ -77,6 +81,19 @@
 
       function addCard(card) {
         $(".hand").append(makeCardButton(card));
+      }
+
+      function submitCard(card) {
+        ws.send(card);
+        $(".round").append('<h2>You submitted: ' + card + '</h2>');
+      }
+
+      function displayCards(cards) {
+        var submitted, i;
+        submitted = $('<div class="submitted" />');
+        for (i = 0; i < cards.length; ++i) {
+          submitted.append(cards[i]);
+        }
       }
 
       window.onload = joinGame;
