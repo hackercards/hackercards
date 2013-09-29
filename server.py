@@ -13,11 +13,29 @@ def create_deck(file_name):
     shuffle(color)
     return color
 
+class Deck:
+    def __init__(self, file_name):
+        with open(file_name) as f:
+            self.deck = f.readlines()
+        shuffle(self.deck)
+        self.position = 0
+
+    def deal_card(self):
+        if self.position > len(self.deck)
+            shuffle(self.deck)
+            position = 0
+        return self.deck[position]
+
+    def deal_cards(self, n):
+        cards = []
+        for _ in range(n):
+            cards.append(self.deal_card())
+        return cards
+
 class Game:
     def __init__(self):
-        self.black = create_deck('black.txt')
-        self.white = create_deck('white.txt')
-        self.counter = 1
+        self.black = Deck('black.txt')
+        self.white = Deck('white.txt')
 
         self.players = {}
 
@@ -25,11 +43,7 @@ class Game:
     def add_player(self, name, ws):
         self.players[name] = ws
 
-        cards = []
-        for x in range(7):
-            cards.append(self.black[self.counter])
-            self.counter += 1
-
+        cards = self.black.deal_cards(7)
         message = {'type': 'join', 'hand': cards}
         ws.send(json.dumps(message))
 
