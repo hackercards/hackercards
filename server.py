@@ -37,8 +37,8 @@ class Game:
     JUDGING = 2
 
     def __init__(self):
-        self.black = Deck('black.txt')
-        self.white = Deck('white.txt')
+        self.black = Deck('cards/black.txt')
+        self.white = Deck('cards/white.txt')
         self.judge_counter = 0
         self.players = []
         self.game_state = Game.IDLE
@@ -123,6 +123,10 @@ game = Game()
 @app.route("/")
 def hello():
     return app.send_static_file('index.html')
+
+@app.route("/src/<name>")
+def serve_file(name):
+    return app.send_static_file(name)
 
 @app.route("/ws")
 def cards():
