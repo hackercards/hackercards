@@ -1,0 +1,22 @@
+
+body{
+	background: url('pinstripe.png');
+}
+
+
+@font-face {
+    font-family: "titleFont";
+    src: url(KGALittleSwag) format("truetype");
+}
+p.customfont { 
+    font-family: "titleFont", Verdana, Tahoma;
+}
+
+.big{
+	text-align: left;
+	font-size: 50px;
+	height: 80px;
+	width: 800px;
+	margin-left: auto;
+	font-family: "titleFont";
+}
