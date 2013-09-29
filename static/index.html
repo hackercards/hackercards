@@ -56,7 +56,7 @@
       }
 
       function startRound(category, judge) {
-        var round;
+        var round, submitted = false;
         round = $('<div class="round" />');
         round.append('<h3>Judge: ' + judge + '</h3>');
         round.append('<h2>Category: ' + category + '</h2>');
@@ -64,8 +64,11 @@
 
         $(".hand").children().click(function() {
           var button = $(this);
-          ws.send(button.text());
-          button.remove();
+          if (!submitted) {
+            ws.send(button.text());
+            button.remove();
+            submitted = true;
+          }
         });
       }
 
