@@ -36,6 +36,7 @@ class Game:
     def __init__(self):
         self.black = Deck('black.txt')
         self.white = Deck('white.txt')
+        self.judge_counter = 0
         self.players = []
         self.started = False
 
@@ -52,9 +53,25 @@ class Game:
 
     def start_game(self):
         self.started = True
+        start_round()
 
     def receive_message(self, name, msg):
         pass
+
+    def choose_judge(self):
+        if self.judge_counter == len(self.players)
+            self.judge_counter = 0
+        judge, _ = self.players[self.judge_counter]
+        self.judge_counter += 1
+        return judge 
+
+    def start_round(self):
+        category_card = self.white.deal_cards(1)
+        player_judge = self.choose_judge()
+        message = {'type': 'round_start', 'category': category_card, 'judge': player_judge}
+        for name, ws in self.players:
+            ws.send(json.dumps(message))
+
 
 app = Flask(__name__)
 
