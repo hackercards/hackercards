@@ -53,7 +53,7 @@ class Game:
 
     def start_game(self):
         self.started = True
-        start_round()
+        self.start_round()
 
     def receive_message(self, name, msg):
         pass
@@ -66,7 +66,7 @@ class Game:
         return judge 
 
     def start_round(self):
-        category_card = self.white.deal_cards(1)
+        category_card = self.white.deal_card()
         player_judge = self.choose_judge()
         message = {'type': 'round_start', 'category': category_card, 'judge': player_judge}
         for name, ws in self.players:
