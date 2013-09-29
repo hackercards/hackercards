@@ -39,6 +39,7 @@ ws.onmessage = function(message) {
 
 ws.onclose = function() {
   console.log("Server disconnected");
+  $("#round").empty();
   $("#game").empty().append('<h1>Server disconnected</h1>');
 }
 
@@ -58,7 +59,8 @@ function newHand(cards) {
 function startRound(category, judge) {
   var round, submitted = false;
   roundJudge = judge;
-  $("#game").append('<h2>Judge: ' + judge + '</h2>')
+  $("#round").empty();
+  $("#round").append('<h2>Judge: ' + judge + '</h2>')
     .append('<h2>Category: ' + category + '</h2>');
 
   if (roundJudge !== name) {
@@ -67,8 +69,12 @@ function startRound(category, judge) {
 }
 
 function endRound(winner, card) {
-  $("#game").append('<h2>' + winner + ' wins with:</h2>');
-  $("#game").append(makeCard(card));
+  var hand = $('<div class="cards" id="hand" />');
+  hand.append(makeCard(card));
+  if (roundJudge === name) {
+    makeClickable(hand, false);
+  }
+  $("#round").append('<h2>' + winner + ' wins with:</h2>').append(hand);
 }
 
 function addCard(card) {
@@ -77,7 +83,7 @@ function addCard(card) {
 
 function submitCard(card) {
   ws.send(card);
-  $("#game").append('<h2>You submitted: ' + card + '</h2>');
+  $("#round").append('<h2>You submitted: ' + card + '</h2>');
 }
 
 function displayCards(cards) {
@@ -86,7 +92,7 @@ function displayCards(cards) {
   for (i = 0; i < cards.length; ++i) {
     hand.append(makeCard(cards[i]));
   }
-  $("#game").append('<h1>All cards:</h1>').append(hand);
+  $("#round").append('<h1>All cards:</h1>').append(hand);
   if (roundJudge === name) {
     makeClickable(hand, false);
   }
