@@ -101,9 +101,7 @@ class Game:
             self.judge_round()
 
     def judge_round(self):
-        cards = []
-        for card, _ in self.cards_played:
-            cards.append(card)
+        cards = self.cards_played.keys()
         message = {'type': 'display', 'cards': cards}
         self.broadcast(message)
 
@@ -129,7 +127,10 @@ def cards():
             if msg is None:
                 game.remove_player(name)
                 break
-            game.receive_message(name, ws, msg)
+            try:
+                game.receive_message(name, ws, msg)
+            except Exception as e:
+                print(e)
 
 if __name__ == "__main__":
     http_server = WSGIServer(('',5000), app, handler_class=WebSocketHandler)
