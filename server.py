@@ -59,7 +59,7 @@ class Game:
         pass
 
     def choose_judge(self):
-        if self.judge_counter == len(self.players)
+        if self.judge_counter == len(self.players):
             self.judge_counter = 0
         judge, _ = self.players[self.judge_counter]
         self.judge_counter += 1
